@@ -1,0 +1,14 @@
+com/example/remember_words/repository/WordGroupRepository.class
+com/example/remember_words/controller/PracticeController.class
+com/example/remember_words/controller/WordGroupController.class
+com/example/remember_words/service/WordsService.class
+com/example/remember_words/service/PracticeService.class
+com/example/remember_words/dto/WordGroupUpdateRequest.class
+com/example/remember_words/service/WordGroupService.class
+com/example/remember_words/entity/Words.class
+com/example/remember_words/entity/WordGroup.class
+com/example/remember_words/RememberWordsApplication.class
+com/example/remember_words/controller/WordController.class
+com/example/remember_words/dto/PracticeDirection.class
+com/example/remember_words/repository/WordsRepository.class
+com/example/remember_words/dto/PracticeRequest.class

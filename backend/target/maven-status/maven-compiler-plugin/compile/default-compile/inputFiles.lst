@@ -1,0 +1,14 @@
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/RememberWordsApplication.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/controller/PracticeController.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/controller/WordController.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/controller/WordGroupController.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/dto/PracticeDirection.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/dto/PracticeRequest.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/dto/WordGroupUpdateRequest.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/entity/WordGroup.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/entity/Words.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/repository/WordGroupRepository.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/repository/WordsRepository.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/service/PracticeService.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/service/WordGroupService.java
+/Users/valentinsuhin/Remember-Words-Web/backend/src/main/java/com/example/remember_words/service/WordsService.java
