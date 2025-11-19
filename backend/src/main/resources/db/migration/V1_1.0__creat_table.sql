@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
     id serial PRIMARY KEY,
     username varchar(50) NOT NULL UNIQUE,
     password varchar(100) NOT NULL,
-    email varchar(100) NOT NULL UNIQUE
+    email varchar(100) NOT NULL UNIQUE,
+    role     VARCHAR(50) NOT NULL DEFAULT 'USER'
 );
 
 CREATE TABLE IF NOT EXISTS word_groups (
