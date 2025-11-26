@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useWordsFunctions } from '../components/wordsHandle.js';
 import { useGroups } from '../components/groupHangler.js';
 import { useWords } from '../components/groupHangler';
-import './homePage.css';
+import '../styles/homePage.css';
 import { updateWord } from './api.jsx';
 
 const HomePage = () => {

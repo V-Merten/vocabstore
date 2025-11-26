@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getPracticeWords, checkPracticeAnswer } from './api';
-import './practicePage.css';
+import '../styles/practicePage.css';
 
 const DIRECTIONS = {
   FOREIGN_TO_NATIVE: 'FOREIGN_TO_NATIVE',

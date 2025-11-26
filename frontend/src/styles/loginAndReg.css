@@ -1,0 +1,235 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.login-root {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #5b3cf5, #ff6db3);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 1000px;
+    height: 520px;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* left part */
+  
+  .login-left {
+    position: relative;
+    background: linear-gradient(135deg, #5b3cf5, #ff6db3);
+    color: #ffffff;
+    padding: 40px 50px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .login-left::before,
+  .login-left::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .login-left::before {
+    width: 260px;
+    height: 260px;
+    top: -60px;
+    right: -80px;
+  }
+  
+  .login-left::after {
+    width: 200px;
+    height: 200px;
+    bottom: -40px;
+    left: -60px;
+  }
+  
+  .login-left-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .login-title {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .login-text {
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 360px;
+  }
+  
+  /* Правая часть */
+  
+  .login-right {
+    background: #fdfdfd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-form-wrapper {
+    width: 80%;
+    max-width: 320px;
+  }
+  
+  .login-form-title {
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.login-input-group {
+    position: relative;
+    width: 100%;
+}
+  
+  .login-input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.6;
+  }
+  
+  .login-input {
+    width: 100%;
+    box-sizing: border-box; /* чтобы учитывать padding и не выходить за пределы контейнера */
+    padding: 12px 16px 12px 40px;
+    border-radius: 999px;
+    border: none;
+    background: #f1f2f6;
+    font-size: 14px;
+    outline: none;
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+  
+  .login-input:focus {
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(91, 60, 245, 0.3);
+  }
+  
+  .login-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999;
+  }
+  
+  .login-remember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  
+  .login-remember input {
+    width: 14px;
+    height: 14px;
+  }
+  
+.login-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0;
+}
+  
+  .login-links-separator {
+    opacity: 0.4;
+  }
+  
+  .login-link {
+    color: #999;
+    text-decoration: none;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+  }
+  
+  .login-error {
+    font-size: 12px;
+    color: #e74c3c;
+    text-align: center;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background: linear-gradient(90deg, #5b3cf5, #ff6db3);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  .login-button:hover:enabled {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+  }
+  
+  .login-button:active:enabled {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  .login-button:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+  
+  /* adapt */
+  
+  @media (max-width: 900px) {
+    .login-card {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+      height: auto;
+    }
+  
+    .login-left {
+      display: none;
+    }
+  
+    .login-right {
+      padding: 40px 20px;
+    }
+  
+    .login-form-wrapper {
+      width: 100%;
+    }
+  }
