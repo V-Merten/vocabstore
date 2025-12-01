@@ -2,8 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/loginAndReg.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:8080";
-
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +15,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: {

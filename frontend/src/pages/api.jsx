@@ -19,9 +19,18 @@ export const checkPracticeAnswer = async ({ id, userWord, direction }) => {
     return await response.json();
   };
 
-export const saveWord = async ({ foreignWord, translatedWord, groupId }) => {
-    const response = await fetch(`/api/${foreignWord}/${translatedWord}/${groupId}`, {
-      method: 'POST'
+  export const saveWord = async ({ foreignWord, translatedWord, groupId }) => {
+    const response = await fetch(`/api/words`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        foreignWord,
+        translatedWord,
+        groupId: groupId ?? null
+      })
     });
   
     if (!response.ok) throw new Error('Failed to save word');

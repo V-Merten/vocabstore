@@ -14,6 +14,10 @@ public class WordGroup {
     @Column(name = "group_name")
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public WordGroup() {
     }
 

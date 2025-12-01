@@ -1,14 +1,26 @@
 package com.example.remember_words.controller;
 
-import com.example.remember_words.entity.Words;
-import com.example.remember_words.service.WordsService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.remember_words.dto.CreateWordDto;
+import com.example.remember_words.entity.Words;
+import com.example.remember_words.service.WordsService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -31,20 +43,19 @@ public class WordController {
         }
     }
 
-    @PostMapping("/{foreignWord}/{translatedWord}/{groupId}")
-    public ResponseEntity<Words> saveWords(@PathVariable String foreignWord,
-                                           @PathVariable String translatedWord,
-                                           @PathVariable String groupId) {
-        Long groupIdLong = null;
-        if (!"null".equalsIgnoreCase(groupId) && !groupId.isEmpty()) {
-            try {
-                groupIdLong = Long.valueOf(groupId);
-            } catch (NumberFormatException ex) {
-                return ResponseEntity.badRequest().build();
-            }
-        }
+    @PostMapping("/words")
+    public ResponseEntity<Words> saveWords(
+            @Valid @RequestBody CreateWordDto createWordDto, 
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
         try {
-            Words newWords = wordsService.save(foreignWord, translatedWord, groupIdLong);
+            Words newWords = wordsService.save(
+                                            createWordDto.getForeignWord(), 
+                                            createWordDto.getTranslatedWord(), 
+                                            createWordDto.getGroupId(), 
+                                            userDetails.getUsername());
+                                            
+            log.info("Created new words | Foreign word={} | Translated word={}",
+                    newWords.getForeignWord(), newWords.getTranslatedWord());
             return ResponseEntity.ok(newWords);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

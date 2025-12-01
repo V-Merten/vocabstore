@@ -21,6 +21,10 @@ public class Words {
     @JoinColumn(name = "group_id",  nullable = true)
     private WordGroup groupId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Words() {
     }
 
@@ -29,10 +33,11 @@ public class Words {
         this.translatedWord = translatedWord;
     }
 
-    public Words(String foreignWord, String translatedWord, WordGroup groupId) {
+    public Words(String foreignWord, String translatedWord, WordGroup groupId, User user) {
         this.foreignWord = foreignWord;
         this.translatedWord = translatedWord;
         this.groupId = groupId;
+        this.user = user;
     }
 
     public WordGroup getGroupId() {

@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,11 @@ public class LoginService {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+
+        request.getSession(true);
 
         logger.info("User logged in | Username: " + username);
     }
