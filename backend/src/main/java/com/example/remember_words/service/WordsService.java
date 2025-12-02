@@ -23,19 +23,23 @@ public class WordsService {
     private final WordsRepository wordsRepository;
     private final WordGroupRepository wordGroupRepository;
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
 
-    public WordsService(WordsRepository wordsRepository, WordGroupRepository wordGroupRepository, UserRepository userRepository) {
+    public WordsService(WordsRepository wordsRepository, WordGroupRepository wordGroupRepository, UserRepository userRepository, CurrentUserService currentUserService) {
         this.wordsRepository = wordsRepository;
         this.wordGroupRepository = wordGroupRepository;
         this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
     }
 
     @Transactional
-    public Words save(String foreignWord, String translatedWord, Long groupId, String username) {
+    public Words save(String foreignWord, String translatedWord, Long groupId) {
         WordGroup wordGroup = null;
         if (groupId != null) {
             wordGroup = wordGroupRepository.findById(groupId).orElse(null);
         }
+
+        String username = currentUserService.getCurrentUsername();
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
@@ -64,7 +68,12 @@ public class WordsService {
 
     @Transactional
     public void updateWords(long id, String foreignWord, String translatedWord) {
-        Words words = wordsRepository.findById(id)
+        String username = currentUserService.getCurrentUsername();
+
+        User user =userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Words words = wordsRepository.findByIdAndUserUsername(id, user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Words not found"));
 
         logger.info("Updating | Foreign Word: {} -> {} | Translated word: {} -> {}",
@@ -72,7 +81,6 @@ public class WordsService {
 
         words.setForeignWord(foreignWord);
         words.setTranslatedWord(translatedWord);
-        wordsRepository.save(words);
     }
 
     public List<Words> findAllWords() {

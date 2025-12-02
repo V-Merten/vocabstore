@@ -39,7 +39,7 @@ public class Words {
         this.groupId = groupId;
         this.user = user;
     }
-
+    
     public WordGroup getGroupId() {
         return groupId;
     }
@@ -70,5 +70,13 @@ public class Words {
 
     public void setTranslatedWord(String translatedWord) {
         this.translatedWord = translatedWord;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

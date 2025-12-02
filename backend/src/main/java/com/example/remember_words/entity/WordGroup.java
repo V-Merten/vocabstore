@@ -21,6 +21,8 @@ public class WordGroup {
     public WordGroup() {
     }
 
+    
+
     public WordGroup(String word) {
         this.name = word;
     }
@@ -40,4 +42,13 @@ public class WordGroup {
     public void setName(String word) {
         this.name = word;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
