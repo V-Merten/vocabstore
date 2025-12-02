@@ -123,4 +123,40 @@ class WordsServiceTest {
         assertEquals(404, ex.getStatusCode().value());
     }
 
+    @Test
+    void deleteWords_shouldDeleteWordsWhenFound() {
+        User user = createUser();
+        Words words = new Words();
+        words.setId(1L);
+        words.setForeignWord("Bonjour");
+        words.setTranslatedWord("Hello");
+        words.setUser(user);
+
+        when(currentUserService.getCurrentUsername()).thenReturn(USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        when(wordsRepository.findByIdAndUser(1L, user)).thenReturn(Optional.of(words));
+
+        Words deletedWords = wordsService.deleteWords(1L);
+
+        assertEquals(words, deletedWords);
+        assertEquals("Hello", deletedWords.getTranslatedWord());
+        
+        verify(wordsRepository).deleteById(words.getId());
+    }
+
+    @Test
+    void deleteWords_shouldThrowWhenWordsNotFound() {
+        User user = createUser();
+        when(currentUserService.getCurrentUsername()).thenReturn(USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        when(wordsRepository.findByIdAndUser(1L, user)).thenReturn(Optional.empty());
+
+        ResponseStatusException ex = assertThrows(
+                ResponseStatusException.class,
+                () -> wordsService.deleteWords(1L)
+        );
+
+        assertEquals(404, ex.getStatusCode().value());
+    }
+
 }

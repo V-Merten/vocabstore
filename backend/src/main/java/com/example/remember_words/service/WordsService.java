@@ -39,11 +39,7 @@ public class WordsService {
             wordGroup = wordGroupRepository.findById(groupId).orElse(null);
         }
 
-        String username = currentUserService.getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
+        User user = getCurrentUser();
         Words words = new Words(foreignWord, translatedWord, wordGroup, user);
 
         if (wordGroup != null) {
@@ -59,23 +55,18 @@ public class WordsService {
 
 
     @Transactional
-    public void deleteWords(long id) {
-        Words words = wordsRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Words not found"));
+    public Words deleteWords(long id) {
+        User user = getCurrentUser();
+        Words words = getWordsByIdAndUser(id, user);
         wordsRepository.deleteById(words.getId());
         logger.info("Deleted words | Foreign word : {} | translated word: {}", words.getForeignWord(), words.getForeignWord());
+        return words;
     }
 
     @Transactional
     public void updateWords(long id, String foreignWord, String translatedWord) {
-        String username = currentUserService.getCurrentUsername();
-
-        User user =userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        Words words = wordsRepository.findByIdAndUserUsername(id, user)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Words not found"));
-
+        User user = getCurrentUser();
+        Words words = getWordsByIdAndUser(id, user);
         logger.info("Updating | Foreign Word: {} -> {} | Translated word: {} -> {}",
                 words.getForeignWord(), foreignWord, words.getTranslatedWord(), translatedWord);
 
@@ -83,22 +74,41 @@ public class WordsService {
         words.setTranslatedWord(translatedWord);
     }
 
+    @Transactional(readOnly = true)
     public List<Words> findAllWords() {
-        return wordsRepository.findAllByOrderByIdAsc();
+        User user = getCurrentUser();
+        return wordsRepository.findAllByUserOrderByIdAsc(user);
     }
 
+    @Transactional(readOnly = true)
     public List<WordGroup> findAllGroups() {
-        return wordGroupRepository.findAllByOrderByIdAsc();
+        User user = getCurrentUser();
+        return wordGroupRepository.findAllByUserOrderByIdAsc(user);
     }
 
+    @Transactional(readOnly = true)
     public List<Words> findWordsByIds(List<Long> ids) {
-        return wordsRepository.findAllById(ids);
+        User user = getCurrentUser();
+        return wordsRepository.findAllByIdInAndUser(ids, user);
     }
 
+    @Transactional(readOnly = true)
     public List<Words> findWordsByGroup(Long groupId) {
+        User user = getCurrentUser();
         WordGroup group = wordGroupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
-        return wordsRepository.findByGroupIdOrderByIdAsc(group);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Group not found"));
+        return wordsRepository.findByGroupIdAndUserOrderByIdAsc(group, user);
+    }
+
+    private User getCurrentUser() {
+        String username = currentUserService.getCurrentUsername();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    private Words getWordsByIdAndUser(long id, User user) {
+        return wordsRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Words not found"));
     }
 
 

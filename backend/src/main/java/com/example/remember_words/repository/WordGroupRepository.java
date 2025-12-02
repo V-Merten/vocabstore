@@ -1,11 +1,13 @@
 package com.example.remember_words.repository;
 
-import com.example.remember_words.entity.WordGroup;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.remember_words.entity.User;
+import com.example.remember_words.entity.WordGroup;
 
 public interface WordGroupRepository extends JpaRepository<WordGroup, Long> {
 
@@ -13,6 +15,6 @@ public interface WordGroupRepository extends JpaRepository<WordGroup, Long> {
     
     Optional<WordGroup> findById(@NonNull Long id);
 
-    List<WordGroup> findAllByOrderByIdAsc();
+    List<WordGroup> findAllByUserOrderByIdAsc(User user);
 
 }

@@ -11,7 +11,9 @@ import com.example.remember_words.entity.Words;
 
 public interface WordsRepository extends JpaRepository<Words, Long> {
     List<Words> findByGroupId(WordGroup groupId);
-    List<Words> findAllByOrderByIdAsc();
-    List<Words> findByGroupIdOrderByIdAsc(WordGroup group);
-    Optional<Words> findByIdAndUserUsername(Long id, User username);
+    List<Words> findAllByUserOrderByIdAsc(User user);
+    List<Words> findByGroupIdAndUserOrderByIdAsc(WordGroup group, User user);
+    List<Words> findAllByIdInAndUser(List<Long> ids, User user);
+
+    Optional<Words> findByIdAndUser(Long id, User username);
 }
