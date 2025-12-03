@@ -34,13 +34,15 @@ public class WordsService {
 
     @Transactional
     public Words save(String foreignWord, String translatedWord, Long groupId) {
+        User currentUser = getCurrentUser();
+
         WordGroup wordGroup = null;
         if (groupId != null) {
-            wordGroup = wordGroupRepository.findById(groupId).orElse(null);
+            wordGroup = wordGroupRepository.findByIdAndUser(groupId, currentUser)
+                                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Word group not found"));
         }
 
-        User user = getCurrentUser();
-        Words words = new Words(foreignWord, translatedWord, wordGroup, user);
+        Words words = new Words(foreignWord, translatedWord, wordGroup, currentUser);
 
         if (wordGroup != null) {
             logger.info("Saved new words | Foreign word={} | Translated word={} | Group={}",
@@ -64,7 +66,7 @@ public class WordsService {
     }
 
     @Transactional
-    public void updateWords(long id, String foreignWord, String translatedWord) {
+    public Words updateWords(long id, String foreignWord, String translatedWord) {
         User user = getCurrentUser();
         Words words = getWordsByIdAndUser(id, user);
         logger.info("Updating | Foreign Word: {} -> {} | Translated word: {} -> {}",
@@ -72,6 +74,7 @@ public class WordsService {
 
         words.setForeignWord(foreignWord);
         words.setTranslatedWord(translatedWord);
+        return words;
     }
 
     @Transactional(readOnly = true)
@@ -95,7 +98,7 @@ public class WordsService {
     @Transactional(readOnly = true)
     public List<Words> findWordsByGroup(Long groupId) {
         User user = getCurrentUser();
-        WordGroup group = wordGroupRepository.findById(groupId)
+        WordGroup group = wordGroupRepository.findByIdAndUser(groupId, user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Group not found"));
         return wordsRepository.findByGroupIdAndUserOrderByIdAsc(group, user);
     }

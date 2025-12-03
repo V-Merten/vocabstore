@@ -1,5 +1,6 @@
 package com.example.remember_words.entity;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +20,7 @@ public class Words {
 
     @ManyToOne
     @JoinColumn(name = "group_id",  nullable = true)
+    @Nullable
     private WordGroup groupId;
 
     @ManyToOne(fetch = FetchType.LAZY)

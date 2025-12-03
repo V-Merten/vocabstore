@@ -3,6 +3,9 @@ package com.example.remember_words.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public class CreateWordDto {
+
+    @NotBlank
+    Long id;
     
     @NotBlank
     String foreignWord;
@@ -16,6 +19,12 @@ public class CreateWordDto {
         this.foreignWord = foreignWord;
         this.translatedWord = translatedWord;
         this.groupId = groupId;
+    }
+
+    public CreateWordDto(Long id, String foreignWord, String translatedWord) {
+        this.id = id;
+        this.foreignWord = foreignWord;
+        this.translatedWord = translatedWord;
     }
 
     public String getForeignWord() {
@@ -37,4 +46,13 @@ public class CreateWordDto {
         this.groupId = groupId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    
 }

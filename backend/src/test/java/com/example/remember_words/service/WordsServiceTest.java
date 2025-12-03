@@ -1,5 +1,6 @@
 package com.example.remember_words.service;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Null;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,8 +74,9 @@ class WordsServiceTest {
 
         when(currentUserService.getCurrentUsername()).thenReturn(USERNAME);
         when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
-        when(wordGroupRepository.findById(GROUP_ID)).thenReturn(Optional.of(group));
-        when(wordsRepository.save(any(Words.class))).thenAnswer(invocation -> {Words word = invocation.getArgument(0); word.setId(1L); return word;});
+        when(wordGroupRepository.findByIdAndUser(GROUP_ID, user)).thenReturn(Optional.of(group));
+        when(wordsRepository.save(any(Words.class)))
+                            .thenAnswer(invocation -> {Words word = invocation.getArgument(0); word.setId(1L); return word;});
 
         Words savedWords = wordsService.save(foreignWord, translatedWord, GROUP_ID);
 
@@ -83,7 +86,7 @@ class WordsServiceTest {
         assertEquals(translatedWord, savedWords.getTranslatedWord());
         assertEquals(user, savedWords.getUser());
 
-        verify(wordGroupRepository).findById(GROUP_ID);
+        verify(wordGroupRepository).findByIdAndUser(GROUP_ID, user);
         verify(userRepository).findByUsername(USERNAME);
         verify(wordsRepository).save(any(Words.class));
     }
@@ -96,12 +99,13 @@ class WordsServiceTest {
 
         when(currentUserService.getCurrentUsername()).thenReturn(USERNAME);
         when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
-        when(wordsRepository.save(any(Words.class))).thenAnswer(invocation -> {Words word = invocation.getArgument(0); word.setId(1L); return word;});
+        when(wordsRepository.save(any(Words.class)))
+                            .thenAnswer(invocation -> {Words word = invocation.getArgument(0); word.setId(1L); return word;});
 
-        Words savedWords = wordsService.save(foreignWord, translatedWord, GROUP_ID);
+        Words savedWords = wordsService.save(foreignWord, translatedWord, null);
 
         assertNotNull(savedWords.getId());
-        assertEquals(savedWords.getGroupId(), null);
+        assertNull(savedWords.getGroupId());
         assertEquals(foreignWord, savedWords.getForeignWord());
         assertEquals(translatedWord, savedWords.getTranslatedWord());
         assertEquals(user, savedWords.getUser());

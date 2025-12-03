@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS words (
     group_id INTEGER,
 
     CONSTRAINT fk_words_user FOREIGN KEY (user_id) REFERENCES users(id),
-    CONSTRAINT fk_words_group FOREIGN KEY (group_id) REFERENCES word_groups(id)
+    CONSTRAINT fk_words_group FOREIGN KEY (group_id) REFERENCES word_groups(id) ON DELETE SET NULL
 );

@@ -25,12 +25,9 @@ public class WordGroupController {
     }
 
     @PostMapping("/{groupName}")
-    public ResponseEntity<WordGroup> createWordGroup(@PathVariable String groupName) {
+    public ResponseEntity<WordGroup> createWordGroup(@PathVariable Long groupId) {
         try {
-            if (groupName.isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
-            WordGroup newGroup = wordGroupService.createWordsGroup(groupName);
+            WordGroup newGroup = wordGroupService.createWordsGroup(groupId);
             return ResponseEntity.ok(newGroup);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -63,9 +60,9 @@ public class WordGroupController {
     }
 
     @PutMapping("/rename/{wordGroupName}/{newWordGroupName}")
-    public ResponseEntity<Void> renameWordGroup(@PathVariable String wordGroupName,
+    public ResponseEntity<Void> renameWordGroup(@PathVariable Long wordGroupId,
                                                 @PathVariable String newWordGroupName) {
-        wordGroupService.renameWordGroup(wordGroupName, newWordGroupName);
+        wordGroupService.renameWordGroup(wordGroupId, newWordGroupName);
         return ResponseEntity.ok().build();
     }
 

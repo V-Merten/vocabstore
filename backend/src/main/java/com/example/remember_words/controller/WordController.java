@@ -33,10 +33,10 @@ public class WordController {
     }
 
     @PutMapping
-    public ResponseEntity<Words> updateWords(@RequestBody Words words) {
+    public ResponseEntity<Words> updateWords(@Valid @RequestBody CreateWordDto words) {
         try{
-            wordsService.updateWords(words.getId(), words.getForeignWord(), words.getTranslatedWord());
-            return new ResponseEntity<>(words, HttpStatus.OK);
+            Words update = wordsService.updateWords(words.getId(), words.getForeignWord(), words.getTranslatedWord());
+            return ResponseEntity.ok(update);
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
