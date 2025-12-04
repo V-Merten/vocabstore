@@ -94,10 +94,19 @@ export const deleteGroup = async (groupId) => {
     if (!response.ok) throw new Error('Failed to delete group');
 };
 
-export const renameGroup = async (oldGroupName, newGroupName) => {
-    const response = await fetch(`/api/word-groups/rename/${oldGroupName}/${newGroupName}`, {
-      method: 'PUT'
+export const renameGroup = async (groupId, newGroupName) => {
+    const response = await fetch(`/api/word-groups/rename`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        id: groupId, 
+        name: newGroupName 
+      })
     });
+
     if (!response.ok) throw new Error('Failed to rename group');
 };
 

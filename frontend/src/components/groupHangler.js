@@ -126,12 +126,15 @@ export const useGroups = () => {
     }
   };
 
-  const handleRenameGroup = async (oldGroupName) => {
+  const handleRenameGroup = async (groupId) => {
     try {
-      await renameGroup(oldGroupName, editingGroupName);
-      setGroups(groups.map(group =>
-        group.name === oldGroupName ? { ...group, name: editingGroupName } : group
-      ));
+      await renameGroup(groupId, editingGroupName);
+      setGroups(prev =>
+        prev.map(group =>
+          group.id === groupId ? { ...group, name: editingGroupName } : group
+        )
+      );
+  
       setEditingGroupId(null);
       setEditingGroupName('');
     } catch (error) {
@@ -182,17 +185,19 @@ export const useGroups = () => {
     if (!groupId) return;
     try {
       await addWordToGroup(groupId, wordId);
-      console.log('Word added to group successfully');
 
-      if (!expandedGroups.includes(groupId)) {
-        await handleSelectGroup(groupId);
-      } else {
-        const updatedWords = await getWordsByGroup(groupId);
-        setGroupWordsMap(prev => ({
-          ...prev,
-          [groupId]: updatedWords
-        }));
-      }
+      await fetchGroupWords(groupId);
+
+      setGroupWordsMap(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(key => {
+          const gid = Number(key);
+          if (gid !== groupId && Array.isArray(updated[gid])) {
+            updated[gid] = updated[gid].filter(w => w.id !== wordId);
+          }
+        });
+        return updated;
+      });
     } catch (error) {
       console.error('Failed to add word to group:', error);
     }

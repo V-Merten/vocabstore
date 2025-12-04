@@ -31,16 +31,15 @@ public class WordGroupService {
     }
 
     @Transactional
-    public WordGroup createWordsGroup(Long groupId) {
+    public WordGroup createWordsGroup(String groupName) {
         User currentUser = getCurrentUser();
-        WordGroup existingGroup = findGroup(groupId);
-
         WordGroup wordGroup = new WordGroup();
-        wordGroup.setName(existingGroup.getName().trim());
+        wordGroup.setName(groupName.trim());
+        wordGroup.setUser(currentUser);
         wordGroupRepository.save(wordGroup);
 
         logger.info("New group has been created: user={}, groupName={}",
-                currentUser.getUsername(), wordGroup.getName());
+                groupName, wordGroup.getName());
 
         return wordGroup;
     }

@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public class CreateWordDto {
 
-    @NotBlank
     Long id;
     
     @NotBlank
@@ -25,6 +24,9 @@ public class CreateWordDto {
         this.id = id;
         this.foreignWord = foreignWord;
         this.translatedWord = translatedWord;
+    }
+
+    public CreateWordDto() {
     }
 
     public String getForeignWord() {

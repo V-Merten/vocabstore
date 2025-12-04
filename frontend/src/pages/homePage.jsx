@@ -255,7 +255,7 @@ const HomePage = () => {
               ];
               return (
                 <Link
-                  to="/practicePage"
+                  to="/practice"
                   state={{ selectedIds: practiceIds }}
                   className="button-link"
                 >
@@ -308,7 +308,7 @@ const HomePage = () => {
                     className="rename-group-button"
                     onClick={() => {
                       if (editingGroupId === group.id) {
-                        handleRenameGroup(group.name);
+                        handleRenameGroup(group.id);
                       } else {
                         setEditingGroupId(group.id);
                         setEditingGroupName(group.name);

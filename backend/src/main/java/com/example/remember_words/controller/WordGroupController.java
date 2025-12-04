@@ -1,9 +1,13 @@
 package com.example.remember_words.controller;
 
+import com.example.remember_words.dto.GroupDto;
 import com.example.remember_words.entity.WordGroup;
 import com.example.remember_words.entity.Words;
 import com.example.remember_words.service.WordGroupService;
 import com.example.remember_words.service.WordsService;
+
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +29,9 @@ public class WordGroupController {
     }
 
     @PostMapping("/{groupName}")
-    public ResponseEntity<WordGroup> createWordGroup(@PathVariable Long groupId) {
+    public ResponseEntity<WordGroup> createWordGroup(@PathVariable String groupName) {
         try {
-            WordGroup newGroup = wordGroupService.createWordsGroup(groupId);
+            WordGroup newGroup = wordGroupService.createWordsGroup(groupName);
             return ResponseEntity.ok(newGroup);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -38,7 +42,7 @@ public class WordGroupController {
     public ResponseEntity<List<Words>> getWordsByGroup(@RequestParam Long groupId) {
         List<Words> words = wordsService.findWordsByGroup(groupId);
         for (Words word : words) {
-        log.info("Words found for group id={} | {}", word.getForeignWord(), word.getTranslatedWord());
+        log.info("Words found= {} | {}", word.getForeignWord(), word.getTranslatedWord());
         }
         return ResponseEntity.ok(words);
     }
@@ -59,10 +63,9 @@ public class WordGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/rename/{wordGroupName}/{newWordGroupName}")
-    public ResponseEntity<Void> renameWordGroup(@PathVariable Long wordGroupId,
-                                                @PathVariable String newWordGroupName) {
-        wordGroupService.renameWordGroup(wordGroupId, newWordGroupName);
+    @PutMapping("/rename")
+    public ResponseEntity<Void> renameWordGroup(@Valid @RequestBody GroupDto dto)  {
+        wordGroupService.renameWordGroup(dto.getId(), dto.getName());
         return ResponseEntity.ok().build();
     }
 

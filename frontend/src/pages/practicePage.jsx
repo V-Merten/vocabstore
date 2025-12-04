@@ -167,7 +167,7 @@ const PracticePage = () => {
       )}
 
       <div className="bottom-navigation">
-        <Link to="/"><button>🏠 Home</button></Link>
+        <Link to="/home"><button>🏠 Home</button></Link>
       </div>
     </div>
   );
