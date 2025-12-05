@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useWordsFunctions } from '../components/wordsHandle.js';
 import { useGroups } from '../components/groupHangler.js';
 import { useWords } from '../components/groupHangler';
-import '../styles/homePage.css';
+import '../styles/HomePage.css';
 import { updateWord } from './api.jsx';
 
 const HomePage = () => {
@@ -22,8 +22,21 @@ const HomePage = () => {
     toggleSelectWord,
     toggleSelectAllWords,
     handleDeleteSelected,
-    handleUpdateSelected
-  } = useWordsFunctions(setWords, setForeignWord, setTranslation, setSelectedWords, setAllSelected, setEditingWord, setEditValues);
+    handleUpdateSelected,
+    handleUpdateSubmit
+  } = useWordsFunctions({
+    words,
+    setWords,
+    selectedWords,
+    setSelectedWords,
+    setAllSelected,
+    editingWord,
+    setEditingWord,
+    editValues,
+    setEditValues,
+    setForeignWord,
+    setTranslation,
+  });
 
   const {
     groupName, setGroupName,
@@ -208,41 +221,29 @@ const HomePage = () => {
           {editingWord && (
             <div className="edit-word-form">
               <h3>Edit Word</h3>
-              <input
-                type="text"
-                value={editValues.foreignWord}
-                onChange={(e) => setEditValues({ ...editValues, foreignWord: e.target.value })}
-                placeholder="Foreign word"
-              />
-              <input
-                type="text"
-                value={editValues.translatedWord}
-                onChange={(e) => setEditValues({ ...editValues, translatedWord: e.target.value })}
-                placeholder="Translation"
-              />
-              <button
-                onClick={async () => {
-                  try {
-                    await updateWord({
-                      id: editingWord.id,
-                      foreignWord: editValues.foreignWord,
-                      translatedWord: editValues.translatedWord
-                    });
-                    setWords(words.map(w =>
-                      w.id === editingWord.id
-                        ? { ...w, foreignWord: editValues.foreignWord, translatedWord: editValues.translatedWord }
-                        : w
-                    ));
-                    setSelectedWords([]);
-                    setEditingWord(null);
-                    setEditValues({ foreignWord: '', translatedWord: '' });
-                  } catch (error) {
-                    console.error('Failed to update word:', error);
-                  }
-                }}
-              >
-                Confirm Update
-              </button>
+                <form onSubmit={handleUpdateSubmit}>
+                  <input
+                    type="text"
+                    value={editValues.foreignWord}
+                    onChange={(e) =>
+                      setEditValues({ ...editValues, foreignWord: e.target.value })
+                    }
+                    placeholder="Foreign word"
+                  />
+
+                  <input
+                    type="text"
+                    value={editValues.translatedWord}
+                    onChange={(e) =>
+                      setEditValues({ ...editValues, translatedWord: e.target.value })
+                    }
+                    placeholder="Translation"
+                  />
+
+                <button type="submit">
+                  Confirm Update
+                </button>
+              </form>
             </div>
           )}
 
@@ -269,15 +270,15 @@ const HomePage = () => {
       <div className="group-section">
         <div>
           <h2 className='section-title'>Groups</h2>
-          <div className="add-word-form">
-            <input
-              type="text"
-              placeholder="Group name"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-            />
-            <button className='group-button' onClick={handleAddGroup}>Add Group</button>
-          </div>
+            <form className="add-word-form" onSubmit={handleAddGroup}>
+              <input
+                type="text"
+                placeholder="Group name"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+              />
+              <button type="submit" className='group-button'>Add Group</button>
+            </form>
         </div>
           <div>
             {groups.map((group, idx) => (
@@ -288,11 +289,17 @@ const HomePage = () => {
                     onClick={() => handleSelectGroup(group.id)}
                   >
                     {editingGroupId === group.id ? (
-                      <input
-                        type="text"
-                        value={editingGroupName}
-                        onChange={(e) => setEditingGroupName(e.target.value)}
-                      />
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleRenameGroup(group.id);
+                      }}>
+                        <input
+                          type="text"
+                          value={editingGroupName}
+                          onChange={(e) => setEditingGroupName(e.target.value)}
+                          autoFocus
+                        />
+                      </form>
                     ) : (
                       group.name
                     )}

@@ -1,6 +1,18 @@
-import { saveWord, deleteWords, updateWord, getAllWords } from '../pages/api';
+import { saveWord, deleteWords, updateWord } from '../pages/api';
 
-export const useWordsFunctions = (setWords, setForeignWord, setTranslation, setSelectedWords, setAllSelected, setEditingWord, setEditValues) => {
+export const useWordsFunctions = ({
+  words,
+  setWords,
+  selectedWords,
+  setSelectedWords,
+  setAllSelected,
+  editingWord,
+  setEditingWord,
+  editValues,
+  setEditValues,
+  setForeignWord,
+  setTranslation,
+}) => {
   const handleAddWord = async (foreignWordInput, translationInput, groupId) => {
     if (!foreignWordInput || !translationInput) return;
     try {
@@ -61,11 +73,37 @@ export const useWordsFunctions = (setWords, setForeignWord, setTranslation, setS
     setEditValues({ foreignWord: wordToUpdate.foreignWord, translatedWord: wordToUpdate.translatedWord });
   };
 
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!editingWord) return;
+    try {
+      await updateWord({
+        id: editingWord.id,
+        foreignWord: editValues.foreignWord,
+        translatedWord: editValues.translatedWord
+      });
+  
+      setWords(words.map(w =>
+        w.id === editingWord.id
+          ? { ...w, foreignWord: editValues.foreignWord, translatedWord: editValues.translatedWord }
+          : w
+      ));
+  
+      setSelectedWords([]);
+      setEditingWord(null);
+      setEditValues({ foreignWord: '', translatedWord: '' });
+    } catch (error) {
+      console.error('Failed to update word:', error);
+    }
+  };
+
   return {
     handleAddWord,
     toggleSelectWord,
     toggleSelectAllWords,
     handleDeleteSelected,
-    handleUpdateSelected
+    handleUpdateSelected,
+    handleUpdateSubmit
   };
 };

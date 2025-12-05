@@ -82,7 +82,9 @@ export const useGroups = () => {
     fetchGroups();
   }, []);
 
-  const handleAddGroup = async () => {
+  const handleAddGroup = async (e) => {
+    e.preventDefault();
+    
     if (!groupName) return;
     try {
       const newGroup = await createWordGroup(groupName);
