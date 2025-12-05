@@ -16,15 +16,16 @@ public class RegisterService {
     private final Logger logger = Logger.getLogger(RegisterService.class.getName());
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Transactional
     public void registerUser(String username, String email, String password) {
-
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username '" + username + "' is already taken");
         }
@@ -33,12 +34,11 @@ public class RegisterService {
         }
 
         String EncodedPassword = passwordEncoder.encode(password);
-     
         User user = new User(username, EncodedPassword, email);
-
         userRepository.save(user);
+
+        emailService.sendRegistrationEmail(user, password);
 
         logger.info("Registered new user | Username: " + username + " | Email: " + email);
     }
-
 }
