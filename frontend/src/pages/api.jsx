@@ -19,7 +19,7 @@ export const checkPracticeAnswer = async ({ id, userWord, direction }) => {
     return await response.json();
   };
 
-  export const saveWord = async ({ foreignWord, translatedWord, groupId }) => {
+export const saveWord = async ({ foreignWord, translatedWord, groupId }) => {
     const response = await fetch(`/api/words`, {
       method: 'POST',
       credentials: "include",
@@ -123,3 +123,36 @@ export const addWordToGroup = async (groupId, wordId) => {
     });
     if (!response.ok) throw new Error('Failed to add word to group');
   };
+
+export const requestPasswordReset = async (email) => {
+  const response = await fetch('/auth/forgot-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+
+  const text = await response.text();
+  if (!response.ok) throw new Error(text || 'Failed to send reset email');
+  return text;
+};
+
+export const resetPassword = async ({ token, newPassword }) => {
+  const response = await fetch('/auth/reset-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, newPassword })
+  });
+
+  const text = await response.text();
+  if (!response.ok) throw new Error(text || 'Failed to reset password');
+  return text;
+};
+
+export const validateResetToken = async (token) => {
+  const response = await fetch(`/auth/reset-password/validate?token=${encodeURIComponent(token)}`, {
+    method: 'GET'
+  });
+  const text = await response.text();
+  if (!response.ok) throw new Error(text || 'Invalid token');
+  return text;
+};

@@ -39,8 +39,13 @@ public class SecurityConfig {
                                 "/assets/**",      
                                 "/static/**",
                                 "/register",
+                                "/reset-password",
+                                "/reset-password/validate",
                                 "/auth/register",
                                 "/auth/login",
+                                "/auth/forgot-password",
+                                "/auth/reset-password",
+                                "/auth/reset-password/validate",
                                 "/error")
                     .permitAll()
                     .anyRequest().authenticated())

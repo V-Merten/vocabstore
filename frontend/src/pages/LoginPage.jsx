@@ -83,9 +83,9 @@ export default function LoginPage() {
               <div className="login-options">
 
                 <div className="login-links">
-                  <a href="#" className="login-link">
+                  <Link to="/forgot-password" className="login-link">
                     Forgot password?
-                  </a>
+                  </Link>
 
                   <Link to="/register" className="login-link">
                     Register

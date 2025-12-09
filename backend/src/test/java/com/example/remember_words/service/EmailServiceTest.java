@@ -1,8 +1,10 @@
 package com.example.remember_words.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,10 +25,17 @@ class EmailServiceTest {
     @InjectMocks
     private EmailService emailService;
 
+    private static final String EMAIL = "john@example.com";
+    private static final String USERNAME = "john";
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = new User(USERNAME, "encodedPassword", EMAIL);
+    }
+
     @Test
     void sendRegistrationEmail_shouldBuildAndSendCorrectMessage(){
-
-        User user = new User("john", "encodedPassword", "john@example.com");
         String rawPassword = "plainPassword123";
 
         emailService.sendRegistrationEmail(user, rawPassword);
@@ -36,12 +45,29 @@ class EmailServiceTest {
 
         SimpleMailMessage sent = captor.getValue();
 
-        assertThat(sent.getTo()).containsExactly("john@example.com");
+        assertThat(sent.getTo()).containsExactly(EMAIL);
         assertThat(sent.getSubject()).isEqualTo("Welcome to Remember Words!");
         assertThat(sent.getText())
-                .contains("Hello john!")
-                .contains("Username: john")
-                .contains("Password: plainPassword123");
+                .contains("Hello " + USERNAME + "!")
+                .contains("Username: " + USERNAME)
+                .contains("Password: " + rawPassword);
     }
 
+    @Test
+    void sendPasswordResetEmail_shouldBuildAndSendCorrectMessage() {
+        String resetLink = "http://localhost/reset?token=abc";
+
+        emailService.sendPasswordResetEmail(user, resetLink);
+
+        ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(mailSender).send(captor.capture());
+
+        SimpleMailMessage sent = captor.getValue();
+
+        assertThat(sent.getTo()).containsExactly(EMAIL);
+        assertThat(sent.getSubject()).isEqualTo("Password Reset Request");
+        assertThat(sent.getText())
+                .contains("Hello " + USERNAME + "!")
+                .contains(resetLink);
+    }
 }
