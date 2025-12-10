@@ -2,6 +2,7 @@ package com.example.remember_words.security;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,20 +36,31 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
-                    "/", "/index.html",
-                                "/assets/**",      
-                                "/static/**",
-                                "/register",
-                                "/reset-password",
-                                "/reset-password/validate",
-                                "/auth/register",
-                                "/auth/login",
-                                "/auth/forgot-password",
-                                "/auth/reset-password",
-                                "/auth/reset-password/validate",
-                                "/error")
-                    .permitAll()
+                        "/", "/index.html",
+                        "/register",
+                        "/forgot-password",
+                        "/reset-password",
+                        "/assets/**",
+                        "/static/**"
+                    ).permitAll()
+                    .requestMatchers(
+                        "/auth/register",
+                        "/auth/login",
+                        "/auth/forgot-password",
+                        "/auth/reset-password",
+                        "/auth/reset-password/validate",
+                        "/error"
+                    ).permitAll()
                     .anyRequest().authenticated())
+                    .exceptionHandling(eh -> eh.authenticationEntryPoint((request, response, authException) -> {
+                        String path = request.getRequestURI();
+                        boolean isApi = path.startsWith("/api") || path.startsWith("/auth");
+                        if (isApi) {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        } else {
+                            response.sendRedirect("/");
+                        }
+                    }))
                     .httpBasic(AbstractHttpConfigurer::disable)
                     .formLogin(AbstractHttpConfigurer::disable);
           

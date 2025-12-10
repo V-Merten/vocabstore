@@ -154,11 +154,14 @@ html, body {
   }
   
 .login-links {
+    font-size: 13px;
+    padding: 0 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     gap: 0;
+    
 }
   
   .login-links-separator {
@@ -166,8 +169,8 @@ html, body {
   }
   
   .login-link {
-    color: #999;
-    text-decoration: none;
+    color: #414141;
+    
   }
   
   .login-link:hover {

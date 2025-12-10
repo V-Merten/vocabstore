@@ -29,6 +29,8 @@ export default function LoginPage() {
         throw new Error(text || "Login failed");
       }
 
+      sessionStorage.setItem("authenticated", "true");
+
       navigate("/home");
     } catch (err) {
       setError(err.message || "Login failed");

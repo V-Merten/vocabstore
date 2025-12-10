@@ -48,7 +48,7 @@ public class PasswordResetController {
         try {
             passwordResetService.validateToken(token);
             return ResponseEntity.ok("Token is valid");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

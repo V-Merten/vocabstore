@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useWordsFunctions } from '../components/wordsHandle.js';
 import { useGroups } from '../components/groupHangler.js';
 import { useWords } from '../components/groupHangler';
@@ -14,7 +14,8 @@ const HomePage = () => {
     selectedWords, setSelectedWords,
     allSelected, setAllSelected,
     editingWord, setEditingWord,
-    editValues, setEditValues
+    editValues, setEditValues,
+    navigate = useNavigate()
   } = useWords();
 
   const {

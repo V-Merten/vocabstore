@@ -45,3 +45,9 @@
 .reset-message.success {
   color: #2ecc71;
 }
+
+.request-link{
+  color: hsl(0, 84%, 58%);
+  display: flex;
+  justify-content: center;
+}

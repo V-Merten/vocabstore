@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class SpaController {
 
-    @GetMapping("/reset-password")
-    public String resetPasswordPage() {
+    @GetMapping({
+        "/",
+        "/register",
+        "/forgot-password",
+        "/reset-password"
+    })
+    public String forwardToSpa() {
         return "forward:/index.html";
     }
 }
