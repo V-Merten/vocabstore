@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { useWordsFunctions } from '../components/wordsHandle.js';
 import { useGroups } from '../components/groupHangler.js';
 import { useWords } from '../components/groupHangler';
 import '../styles/HomePage.css';
-import { deleteAccount } from './api.jsx';
+import { useAccountActions } from '../components/accountActions.js';
 
 const HomePage = () => {
   const {
@@ -14,8 +14,7 @@ const HomePage = () => {
     selectedWords, setSelectedWords,
     allSelected, setAllSelected,
     editingWord, setEditingWord,
-    editValues, setEditValues,
-    navigate = useNavigate()
+    editValues, setEditValues
   } = useWords();
 
   const {
@@ -73,30 +72,22 @@ const HomePage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCode, setDeleteCode] = useState('');
   const [deleteInput, setDeleteInput] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState(null);
+  const {
+    isDeleting,
+    deleteError,
+    logoutError,
+    handleDeleteAccount,
+    handleLogout,
+    resetDeleteError,
+  } = useAccountActions();
 
   const openDeleteModal = () => {
     const randomCode = Math.random().toString(36).slice(2, 8).toUpperCase();
     setDeleteCode(randomCode);
     setDeleteInput('');
-    setDeleteError(null);
+    resetDeleteError();
     setShowDeleteModal(true);
     setIsAccountMenuOpen(false);
-  };
-
-  const handleDeleteAccount = async () => {
-    setIsDeleting(true);
-    setDeleteError(null);
-    try {
-      await deleteAccount();
-      sessionStorage.removeItem("authenticated");
-      navigate('/');
-    } catch (err) {
-      setDeleteError(err.message || 'Failed to delete account');
-    } finally {
-      setIsDeleting(false);
-    }
   };
 
   return (
@@ -115,6 +106,10 @@ const HomePage = () => {
               <button className="account-action danger" onClick={openDeleteModal}>
                 Delete account
               </button>
+              <button className="account-action" onClick={handleLogout}>
+                Logout
+              </button>
+              {logoutError && <div className="modal-error">{logoutError}</div>}
             </div>
           )}
         </div>

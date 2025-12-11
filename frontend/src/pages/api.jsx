@@ -166,3 +166,14 @@ export const deleteAccount = async () => {
   if (!response.ok) throw new Error(text || 'Failed to delete account');
   return text;
 };
+
+export const logout = async () => {
+  const response = await fetch('/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to logout');
+  }
+};
