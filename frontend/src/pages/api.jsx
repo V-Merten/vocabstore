@@ -156,3 +156,13 @@ export const validateResetToken = async (token) => {
   if (!response.ok) throw new Error(text || 'Invalid token');
   return text;
 };
+
+export const deleteAccount = async () => {
+  const response = await fetch('/account/delete', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  const text = await response.text();
+  if (!response.ok) throw new Error(text || 'Failed to delete account');
+  return text;
+};

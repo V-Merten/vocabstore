@@ -62,7 +62,16 @@ public class SecurityConfig {
                         }
                     }))
                     .httpBasic(AbstractHttpConfigurer::disable)
-                    .formLogin(AbstractHttpConfigurer::disable);
+                    .formLogin(AbstractHttpConfigurer::disable)
+                    .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        })
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
+                    );
           
             return http.build();
         }

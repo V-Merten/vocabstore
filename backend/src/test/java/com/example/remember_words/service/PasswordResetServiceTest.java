@@ -64,9 +64,9 @@ class PasswordResetServiceTest {
         assertThat(saved.getToken()).isNotBlank();
         assertThat(saved.getExpiresAt()).isAfter(LocalDateTime.now());
 
-        String expectedPrefix = "https://localhost::8080/reset-password?token=";
+        String expectedPrefix = "http://localhost:8080/reset-password?token=";
         verify(emailService).sendPasswordResetEmail(eq(user),
-                argThat(link -> link.startsWith(expectedPrefix)));
+                argThat(link -> link.equals(expectedPrefix + saved.getToken())));
     }
 
     @Test

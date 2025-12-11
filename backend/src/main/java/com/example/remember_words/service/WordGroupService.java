@@ -37,10 +37,8 @@ public class WordGroupService {
         wordGroup.setName(groupName.trim());
         wordGroup.setUser(currentUser);
         wordGroupRepository.save(wordGroup);
-
         logger.info("New group has been created: user={}, groupName={}",
                 groupName, wordGroup.getName());
-
         return wordGroup;
     }
 

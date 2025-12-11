@@ -8,8 +8,6 @@ import com.example.remember_words.service.WordsService;
 
 import jakarta.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/word-groups")
 public class WordGroupController {
 
-    private final Logger log = LoggerFactory.getLogger(WordGroupController.class);
     private final WordGroupService wordGroupService;
     private final WordsService wordsService;
 
@@ -41,18 +38,12 @@ public class WordGroupController {
     @GetMapping("/words")
     public ResponseEntity<List<Words>> getWordsByGroup(@RequestParam Long groupId) {
         List<Words> words = wordsService.findWordsByGroup(groupId);
-        for (Words word : words) {
-        log.info("Words found= {} | {}", word.getForeignWord(), word.getTranslatedWord());
-        }
         return ResponseEntity.ok(words);
     }
 
     @GetMapping("/groups")
     public ResponseEntity<List<WordGroup>> allGroups() {
         List<WordGroup> words = wordsService.findAllGroups();
-        for (WordGroup wordGroup : words) {
-            log.info("Groups found={}", wordGroup.getName());
-        }
         return ResponseEntity.ok(words);
     }
 

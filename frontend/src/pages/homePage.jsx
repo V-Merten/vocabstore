@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useWordsFunctions } from '../components/wordsHandle.js';
 import { useGroups } from '../components/groupHangler.js';
 import { useWords } from '../components/groupHangler';
 import '../styles/HomePage.css';
-import { updateWord } from './api.jsx';
+import { deleteAccount } from './api.jsx';
 
 const HomePage = () => {
   const {
@@ -64,8 +64,61 @@ const HomePage = () => {
     [words]
   );
 
+  const sortedGroups = useMemo(
+    () => [...groups].sort((a, b) => (Number(b?.id) || 0) - (Number(a?.id) || 0)),
+    [groups]
+  );
+
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteCode, setDeleteCode] = useState('');
+  const [deleteInput, setDeleteInput] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
+  const openDeleteModal = () => {
+    const randomCode = Math.random().toString(36).slice(2, 8).toUpperCase();
+    setDeleteCode(randomCode);
+    setDeleteInput('');
+    setDeleteError(null);
+    setShowDeleteModal(true);
+    setIsAccountMenuOpen(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteAccount();
+      sessionStorage.removeItem("authenticated");
+      navigate('/');
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete account');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="page-container">
+      <div className="account-bar">
+        <div className="account-menu">
+          <button
+            className="account-button"
+            onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+            title="Account"
+          >
+            ☰
+          </button>
+          {isAccountMenuOpen && (
+            <div className="account-dropdown">
+              <button className="account-action danger" onClick={openDeleteModal}>
+                Delete account
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="page-layout">
         <div className="word-section">
           <h2 className='section-title'>Add Word</h2>
@@ -99,7 +152,7 @@ const HomePage = () => {
                 onChange={e => setSelectedGroupId(e.target.value)}
               >
                 <option value="">Select group</option>
-                {groups.map((group) => (
+                {sortedGroups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.name}
                   </option>
@@ -198,7 +251,7 @@ const HomePage = () => {
                   <option value="" className="group-button">
                     Select group
                   </option>
-                  {groups.map((group) => (
+                  {sortedGroups.map((group) => (
                     <option key={group.id} value={group.id}>
                       {group.name}
                     </option>
@@ -282,8 +335,8 @@ const HomePage = () => {
             </form>
         </div>
           <div>
-            {groups.map((group, idx) => (
-              <div key={idx} className="group-conteiner">
+            {sortedGroups.map((group) => (
+              <div key={group.id} className="group-conteiner">
                 <div className="group-header">
                   <button
                     className="group-button"
@@ -367,6 +420,40 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      {showDeleteModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3 className="section-title">Delete account</h3>
+            <p className="section-text">
+              To confirm deletion, type this code: <strong>{deleteCode}</strong>
+            </p>
+            <input
+              type="text"
+              value={deleteInput}
+              onChange={(e) => setDeleteInput(e.target.value.toUpperCase())}
+              placeholder="Enter code"
+              className="modal-input"
+            />
+            {deleteError && <div className="modal-error">{deleteError}</div>}
+            <div className="modal-actions">
+              <button
+                className="group-button"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                className="group-button danger"
+                onClick={handleDeleteAccount}
+                disabled={deleteInput.trim() !== deleteCode || isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete account'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

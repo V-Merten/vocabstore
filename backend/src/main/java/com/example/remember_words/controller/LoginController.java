@@ -26,7 +26,6 @@ public class LoginController {
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
-    
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto, HttpServletRequest request) {
@@ -34,7 +33,7 @@ public class LoginController {
             loginService.loginUser(loginDto.getUsername(), loginDto.getPassword(), request);
             return ResponseEntity.ok("Login successful");
         } catch (BadCredentialsException e) {
-            logger.warning("Failed login attempt | Username: " + loginDto.getUsername() + " | Reason: " + e.getMessage());
+            logger.warning("Failed login attempt | Username: " + loginDto.getUsername() + " | Reason: Bad credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
