@@ -21,7 +21,7 @@ public class EmailService {
     public void sendRegistrationEmail(User user, String rawPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
-        message.setSubject("Welcome to Remember Words!");
+        message.setSubject("Welcome to VocabStore!");
         message.setText(
                 "Hello " + user.getUsername() + "!\n\n" +
                 "Your registration was successful.\n\n" +
