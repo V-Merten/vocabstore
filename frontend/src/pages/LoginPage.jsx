@@ -17,7 +17,7 @@ export default function LoginPage() {
     try {
       const res = await fetch(`/auth/login`, {
         method: "POST",
-        credentials: "include",
+        credentials: "include", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -45,9 +45,9 @@ export default function LoginPage() {
         {/* left part */}
         <div className="login-left">
           <div className="login-left-content">
-            <h1 className="login-title"> Text </h1>
+            <h1 className="login-title"> Learning new words made easy </h1>
             <p className="login-text">
-             text
+            Create your own vocabularies, organize words into groups, and practice every day.
             </p>
           </div>
         </div>

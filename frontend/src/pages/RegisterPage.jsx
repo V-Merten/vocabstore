@@ -101,9 +101,11 @@ export default function RegisterPage() {
         {/* right part */}
         <div className="login-left">
           <div className="login-left-content">
-            <h1 className="login-title"> Text </h1>
+            <h1 className="login-title"> Security notice</h1>
             <p className="login-text">
-             text
+            • This is a learning project - please use test passwords only.<br />
+            • Email is used only for password recovery.<br />
+            • You can delete your account and all data at any time.           
             </p>
           </div>
 

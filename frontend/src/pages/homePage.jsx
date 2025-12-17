@@ -314,7 +314,7 @@ const HomePage = () => {
               );
             })()}
           </div>
-        </div>
+      </div>
 
       <div className="group-section">
         <div>
@@ -329,7 +329,7 @@ const HomePage = () => {
               <button type="submit" className='group-button'>Add Group</button>
             </form>
         </div>
-          <div>
+          <div className="group-list">
             {sortedGroups.map((group) => (
               <div key={group.id} className="group-conteiner">
                 <div className="group-header">
@@ -413,6 +413,26 @@ const HomePage = () => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+      <div className="page-footer">
+        <div className="page-footer-content">
+          <h2 className="page-footer-title">About Remember Words</h2>
+          Remember Words helps you build and organize your personal vocabulary in a simple and effective way. <br />
+          <br />
+          You can create word lists, group words by topics for faster searching, and practice vocabulary through interactive exercises designed to improve long-term memory. <br />
+          <br />
+          To get started, simply add new words with translations and organize them into groups to make managing and finding your vocabulary easier. <br />
+          <br />
+          Remember Words is a learning pet project created to demonstrate full-stack development skills and built for educational purposes and personal practice. <br />
+          <br />
+          The full source code of the project is available on GitHub and can be freely explored by anyone interested in the implementation details: 
+          <a href="https://github.com/V-Merten/RememberWordsWeb" target="_blank" rel="noopener noreferrer">
+            Open source
+          </a>
+          <br />
+          <br />
+          Have fun!
         </div>
       </div>
       {showDeleteModal && (
