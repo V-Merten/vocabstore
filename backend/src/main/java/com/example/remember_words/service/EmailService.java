@@ -30,7 +30,7 @@ public class EmailService {
                 "Password: " + rawPassword + "\n\n" +
                 "Welcome!"
             );
-
+            
         mailSender.send(message);
         logger.info("Registration email sent to " + user.getEmail());
     }
@@ -46,7 +46,7 @@ public class EmailService {
                 resetLink + "\n\n" +
                 "If you did not request a password reset, please ignore this email."
             );
-
+        
         mailSender.send(message);
         logger.info("Password reset email sent to " + user.getEmail());
     }
