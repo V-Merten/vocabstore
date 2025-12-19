@@ -16,9 +16,3 @@ VocabStore is a full-stack learning project for building and practicing personal
 **Backend:** Spring Boot + Spring Security + JPA (Hibernate)  
 **Database:** PostgreSQL  
 **Email:** Gmail SMTP (App Password)
-
-## Running Locally
-### Requirements
-- Java + Maven
-- Node.js + npm
-- PostgreSQL
